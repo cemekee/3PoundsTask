@@ -12,20 +12,18 @@ class TableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         let urlString = "https://jsonplaceholder.typicode.com/albums"
-        
         if let url = URL(string: urlString) {
             if let data = try? Data(contentsOf: url){
                parse(json: data)
             }
-            
         }
     }
+    
     func parse(json: Data){
         let decoder = JSONDecoder()
-        if let jsonAlbums = try? decoder.decode(Albums.self, from: json) {
-            albums = jsonAlbums.results
+        if let jsonAlbums = try? decoder.decode([Album].self,from: json) {
+            albums = jsonAlbums
             tableView.reloadData()
         }
     }
@@ -38,8 +36,7 @@ class TableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         let album = albums[indexPath.row]
         cell.textLabel?.text = album.title
-        cell.detailTextLabel?.text = album.title
+        cell.detailTextLabel?.text = String(album.id)
         return cell
     }
-
 }
